@@ -1,0 +1,34 @@
+lab 5 
+zadanie 4
+a)
+select distinct(rodzaj) from kreatura;
+b)
+select concat(nazwa,' ', rodzaj) from kreatura where rodzaj like  'wi%';
+c)
+select nazwa, waga*ilosc from zasob where dataPozyskania between '2000-01-01' and '2007-12-31';
+zadanie 5
+a)
+select nazwa, waga*0.70,' ',waga*0.30  from zasob;
+b)
+select nazwa from zasob where rodzaj IS NULL;
+c)
+ select distinct(rodzaj), nazwa from zasob where nazwa like 'Ba%' or nazwa like '%os' order by rodzaj asc;
+lab 6
+a)
+select avg(udzwig) as sredni_udzwig from kreatura where rodzaj='wiking';
+b)
+select rodzaj count(*), avg(waga) from kreatura group by rodzaj;
+c)
+ select rodzaj, avg(2020-year(dataUr)) as wiek from kreatura group by rodzaj;
+zadanie 2
+a)
+select rodzaj, sum(waga) from kreatura group by rodzaj;
+b)
+select nazwa, avg(waga) from zasob where ilosc>4 group by nazwa having sum(waga)>10;
+c)
+select rodzaj, count(distinct (nazwa)) as liczba from zasob group by rodzaj having liczba>1;
+zadanie 3
+a)
+select nazwa, sum(ilosc) from kreatura k , ekwipunek e  where k.idKreatury=e.idKreatury group by nazwa;
+b)
+ select k.nazwa, e.idZasobu, e.ilosc, s.nazwa from kreatura k , ekwipunek e, zasob s where k.idKreatury=e.idKreatury and s.idZasobu=e.idZasobu;
