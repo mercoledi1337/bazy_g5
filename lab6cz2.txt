@@ -1,0 +1,10 @@
+zadanie 3 
+c)
+ select k.idKreatury, k.nazwa, e.idKreatury from kreatura k left join ekwipunek e on k.idKreatury=e.idKreatury where e.idKreatury is null;
+zadanie 4
+a)
+select k.nazwa, z.nazwa from kreatura k, zasob z natural join ekwipunek inner join ekwipunek e on e.idZasobu=z.idZasobu where k.rodzaj='wiking' and year(dataUr) like '167%';
+b)
+select k.nazwa from kreatura k inner join ekwipunek e on k.idKreatury=e.idKreatury inner join zasob z on e.idZasobu=z.idZasobu where z.rodzaj='jedzenie' order by dataUr desc limit 5;
+c)
+select k.nazwa, k2.nazwa from kreatura k, kreatura k2 where k.idKreatury=k2.idKreatury+5;
