@@ -1,0 +1,14 @@
+zadanie 5 
+a)
+SELECT k.rodzaj, AVG(e.ilosc *z.waga) FROM kreatura AS k, ekwipunek AS e, zasob AS z where k.idKreatury=e.idKreatury AND e.idZasobu=z.idZasobu AND k.rodzaj NOT IN('malpa','waz')GROUP BY rodzaj
+
+HAVING SUM(e.ilosc) < 30;
+b)
+(select rodzaj, nazwa, dataUr from kreatura order by dataUr limit 1)
+union (select rodzaj, nazwa, dataUr from kreatura order by dataUr desc limit 1);
+lab 7
+zad 1
+a)
+SELECT nazwa
+FROM kreatura k
+WHERE k.idKreatury NOT IN (SELECT id_uczestnika FROM uczestnicy);
