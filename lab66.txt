@@ -12,3 +12,25 @@ a)
 SELECT nazwa
 FROM kreatura k
 WHERE k.idKreatury NOT IN (SELECT id_uczestnika FROM uczestnicy);
+zadanie 2
+a)
+select w.nazwa, count(u.id_uczestnika), group_concat(k.nazwa) from wyprawa w, kreatura k,
+ uczestnicy u where k.idKreatury=u.id_uczestnika and 
+ u.id_wyprawy=w.id_wyprawy group by w.nazwa;
+b)
+sselect e.idEtapu, s.nazwa, k.nazwa from etapy_wyprawy e, sektor s, wyprawa w,
+kreatura k where w.kierownik=k.idKreatury and w.id_wyprawy=e.idWyprawy 
+and e.sektor = s.id_sektora order by w.data_rozpoczecia, e.kolejnosc;
+zadanie 3
+a)
+SELECT s.nazwa,count(e.sektor) from sektor s left join etapy_wyprawy e on s.id_sektora=e.sektor GROUP BY s.nazwa;
+b)
+SELECT distinct k.nazwa, if(u.id_uczestnika IS NULL, 'nie brał udziału w wyprawie', 'brał udział w wyprawie')
+from kreatura k left join uczestnicy u on u.id_uczestnika=idKreatury;
+zadanie 4
+a)
+select w.nazwa, sum(length(e.dziennik)) as liczba from wyprawa w, etapy_wyprawy e where w.id_wyprawy=e.idWyprawy group by w.nazwa having liczba < 400; 
+b)
+select w.nazwa, sum(z.waga*e.ilosc)/count(u.id_uczestnika) from  
+kreatura k, ekwipunek e, zasob z, uczestnicy u, wyprawa w where z.idZasobu=e.idZasobu and e.idKreatury=k.idKreatury and
+k.idKreatury=u.id_uczestnika and u.id_wyprawy=w.id_wyprawy group by w.nazwa;
