@@ -1,0 +1,181 @@
+-- MySQL Workbench Forward Engineering
+
+SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
+SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
+
+-- -----------------------------------------------------
+-- Schema seredam
+-- -----------------------------------------------------
+
+-- -----------------------------------------------------
+-- Schema seredam
+-- -----------------------------------------------------
+CREATE SCHEMA IF NOT EXISTS `seredam` DEFAULT CHARACTER SET utf8 ;
+USE `seredam` ;
+
+-- -----------------------------------------------------
+-- Table `seredam`.`Klasyfikacja`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `seredam`.`Klasyfikacja` (
+  `idKlasyfikacja` INT NOT NULL AUTO_INCREMENT,
+  `Imie` VARCHAR(45) CHARACTER SET 'utf8mb4' COLLATE 'utf8mb4_0900_ai_ci' NOT NULL,
+  `Nazwisko` VARCHAR(45) CHARACTER SET 'utf8mb4' COLLATE 'utf8mb4_0900_ai_ci' NOT NULL,
+  `Kraj` VARCHAR(45) CHARACTER SET 'utf8mb4' COLLATE 'utf8mb4_0900_ai_ci' NOT NULL,
+  `Punkty` VARCHAR(45) CHARACTER SET 'utf8mb4' COLLATE 'utf8mb4_0900_ai_ci' NOT NULL,
+  `Wystepy` VARCHAR(45) NOT NULL,
+  `idSkoczek` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`idKlasyfikacja`))
+ENGINE = InnoDB
+AUTO_INCREMENT = 8
+DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `seredam`.`Sedzia`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `seredam`.`Sedzia` (
+  `idSedzia` INT NOT NULL,
+  `Imie` VARCHAR(45) CHARACTER SET 'utf8mb4' COLLATE 'utf8mb4_0900_ai_ci' NOT NULL,
+  `Nazwisko` VARCHAR(45) CHARACTER SET 'utf8mb4' COLLATE 'utf8mb4_0900_ai_ci' NOT NULL,
+  `Kraj` VARCHAR(45) CHARACTER SET 'utf8mb4' COLLATE 'utf8mb4_0900_ai_ci' NOT NULL,
+  PRIMARY KEY (`idSedzia`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `seredam`.`Skoczek`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `seredam`.`Skoczek` (
+  `idSkoczek` INT NOT NULL AUTO_INCREMENT,
+  `Imie` VARCHAR(45) CHARACTER SET 'utf8mb4' COLLATE 'utf8mb4_0900_ai_ci' NOT NULL,
+  `Nazwisko` VARCHAR(45) CHARACTER SET 'utf8mb4' COLLATE 'utf8mb4_0900_ai_ci' NOT NULL,
+  `Kraj` VARCHAR(45) CHARACTER SET 'utf8mb4' COLLATE 'utf8mb4_0900_ai_ci' NOT NULL,
+  `Klasyfikacja_idKlasyfikacja` INT NOT NULL,
+  PRIMARY KEY (`idSkoczek`, `Klasyfikacja_idKlasyfikacja`),
+  INDEX `fk_Skoczek_Klasyfikacja1_idx` (`Klasyfikacja_idKlasyfikacja` ASC) VISIBLE,
+  CONSTRAINT `fk_Skoczek_Klasyfikacja1`
+    FOREIGN KEY (`Klasyfikacja_idKlasyfikacja`)
+    REFERENCES `seredam`.`Klasyfikacja` (`idKlasyfikacja`))
+ENGINE = InnoDB
+AUTO_INCREMENT = 8
+DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `seredam`.`Skocznia`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `seredam`.`Skocznia` (
+  `IdSkoczni` INT NOT NULL AUTO_INCREMENT,
+  `Nazwa` VARCHAR(45) CHARACTER SET 'utf8mb4' COLLATE 'utf8mb4_0900_ai_ci' NOT NULL,
+  `Dlugosc` VARCHAR(45) NOT NULL,
+  `RekordSkoczni` FLOAT NOT NULL,
+  `Kraj` VARCHAR(45) CHARACTER SET 'utf8mb4' COLLATE 'utf8mb4_0900_ai_ci' NOT NULL,
+  PRIMARY KEY (`IdSkoczni`))
+ENGINE = InnoDB
+AUTO_INCREMENT = 5
+DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `seredam`.`Zawody`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `seredam`.`Zawody` (
+  `idZawody` INT NOT NULL,
+  `Nazwa` VARCHAR(45) CHARACTER SET 'utf8mb4' COLLATE 'utf8mb4_0900_ai_ci' NOT NULL,
+  `Punktacja` FLOAT NOT NULL,
+  `Data` DATE NOT NULL,
+  `Skoczek_idSkoczek` INT NOT NULL,
+  `Sedzia_idSedzia` INT NOT NULL,
+  `Skocznia_IdSkoczni` INT NOT NULL,
+  PRIMARY KEY (`idZawody`),
+  INDEX `fk_Zawody_Skoczek_idx` (`Skoczek_idSkoczek` ASC) VISIBLE,
+  INDEX `fk_Zawody_Sedzia1_idx` (`Sedzia_idSedzia` ASC) VISIBLE,
+  INDEX `fk_Zawody_Skocznia1_idx` (`Skocznia_IdSkoczni` ASC) VISIBLE,
+  CONSTRAINT `fk_Zawody_Sedzia1`
+    FOREIGN KEY (`Sedzia_idSedzia`)
+    REFERENCES `seredam`.`Sedzia` (`idSedzia`),
+  CONSTRAINT `fk_Zawody_Skoczek`
+    FOREIGN KEY (`Skoczek_idSkoczek`)
+    REFERENCES `seredam`.`Skoczek` (`idSkoczek`),
+  CONSTRAINT `fk_Zawody_Skocznia1`
+    FOREIGN KEY (`Skocznia_IdSkoczni`)
+    REFERENCES `seredam`.`Skocznia` (`IdSkoczni`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+USE `seredam` ;
+
+-- -----------------------------------------------------
+-- function Ilosc_skokow
+-- -----------------------------------------------------
+
+DELIMITER $$
+USE `seredam`$$
+CREATE DEFINER=`seredam`@`localhost` FUNCTION `Ilosc_skokow`() RETURNS int
+begin
+declare ile int;
+select count(*) into @ile from Zawody;
+return @ile;
+end$$
+
+DELIMITER ;
+
+-- -----------------------------------------------------
+-- procedure PktWiatr
+-- -----------------------------------------------------
+
+DELIMITER $$
+USE `seredam`$$
+CREATE DEFINER=`seredam`@`localhost` PROCEDURE `PktWiatr`(IN id int)
+begin
+update Zawody set Punktacja = 1.2 * Punktacja where idZawody=id;
+end$$
+
+DELIMITER ;
+USE `seredam`;
+
+DELIMITER $$
+USE `seredam`$$
+CREATE
+DEFINER=`seredam`@`localhost`
+TRIGGER `seredam`.`Dyskfalifikacja`
+AFTER DELETE ON `seredam`.`Zawody`
+FOR EACH ROW
+BEGIN
+
+update Klasyfikacja k join Zawody z on old.Skoczek_idSkoczek=k.idSkoczek set k.Punkty=Punkty-old.Punktacja;
+
+END$$
+
+USE `seredam`$$
+CREATE
+DEFINER=`seredam`@`localhost`
+TRIGGER `seredam`.`Klasyfikacja`
+AFTER INSERT ON `seredam`.`Zawody`
+FOR EACH ROW
+BEGIN
+
+update Klasyfikacja k join Zawody z on new.Skoczek_idSkoczek=k.idSkoczek set k.Punkty=Punkty+new.Punktacja;
+
+END$$
+
+USE `seredam`$$
+CREATE
+DEFINER=`seredam`@`localhost`
+TRIGGER `seredam`.`Wystepy`
+AFTER INSERT ON `seredam`.`Zawody`
+FOR EACH ROW
+BEGIN
+
+update Klasyfikacja k join Zawody z on new.Skoczek_idSkoczek=k.idSkoczek set k.wystepy=k.wystepy+1;
+
+END$$
+
+
+DELIMITER ;
+
+SET SQL_MODE=@OLD_SQL_MODE;
+SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
+SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
