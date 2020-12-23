@@ -1,3 +1,22 @@
+lab 6
+a)
+select avg(udzwig) as sredni_udzwig from kreatura where rodzaj='wiking';
+b)
+select rodzaj count(*), avg(waga) from kreatura group by rodzaj;
+c)
+ select rodzaj, avg(2020-year(dataUr)) as wiek from kreatura group by rodzaj;
+zadanie 2
+a)
+select rodzaj, sum(waga) from kreatura group by rodzaj;
+b)
+select nazwa, avg(waga) from zasob where ilosc>4 group by nazwa having sum(waga)>10;
+c)
+select rodzaj, count(distinct (nazwa)) as liczba from zasob group by rodzaj having liczba>1;
+zadanie 3
+a)
+select nazwa, sum(ilosc) from kreatura k , ekwipunek e  where k.idKreatury=e.idKreatury group by nazwa;
+b)
+ select k.nazwa, e.idZasobu, e.ilosc, s.nazwa from kreatura k , ekwipunek e, zasob s where k.idKreatury=e.idKreatury and s.idZasobu=e.idZasobu;
 zadanie 3 
 c)
  select k.idKreatury, k.nazwa, e.idKreatury from kreatura k left join ekwipunek e on k.idKreatury=e.idKreatury where e.idKreatury is null;
@@ -6,5 +25,13 @@ a)
 select k.nazwa, z.nazwa from kreatura k, zasob z natural join ekwipunek inner join ekwipunek e on e.idZasobu=z.idZasobu where k.rodzaj='wiking' and year(dataUr) like '167%';
 b)
 select k.nazwa from kreatura k inner join ekwipunek e on k.idKreatury=e.idKreatury inner join zasob z on e.idZasobu=z.idZasobu where z.rodzaj='jedzenie' order by dataUr desc limit 5;
+zadanie 5 
+a)
+SELECT k.rodzaj, AVG(e.ilosc *z.waga) FROM kreatura AS k, ekwipunek AS e, zasob AS z where k.idKreatury=e.idKreatury AND e.idZasobu=z.idZasobu AND k.rodzaj NOT IN('malpa','waz')GROUP BY rodzaj
+
+HAVING SUM(e.ilosc) < 30;
+b)
+(select rodzaj, nazwa, dataUr from kreatura order by dataUr limit 1)
+union (select rodzaj, nazwa, dataUr from kreatura order by dataUr desc limit 1);
 c)
 select k.nazwa, k2.nazwa from kreatura k, kreatura k2 where k.idKreatury=k2.idKreatury+5;
