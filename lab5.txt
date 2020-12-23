@@ -1,16 +1,2 @@
 lab 5 
-zadanie 4
-a)
-select distinct(rodzaj) from kreatura;
-b)
-select concat(nazwa,' ', rodzaj) from kreatura where rodzaj like  'wi%';
-c)
-select nazwa, waga*ilosc from zasob where dataPozyskania between '2000-01-01' and '2007-12-31';
-zadanie 5
-a)
-select nazwa, waga*0.70,' ',waga*0.30  from zasob;
-b)
-select nazwa from zasob where rodzaj IS NULL;
-c)
- select distinct(rodzaj), nazwa from zasob where nazwa like 'Ba%' or nazwa like '%os' order by rodzaj asc;
 
